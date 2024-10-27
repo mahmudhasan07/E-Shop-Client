@@ -1,0 +1,9 @@
+#auth {
+    
+    transition: all 1.5s;
+}
+
+#auth_banner {
+    transition: all 1.5s; 
+    /* transform: translateX(0%); */
+}
