@@ -1,7 +1,6 @@
 import { createAsyncThunk } 
 from "@reduxjs/toolkit";
-import getAxios, { axiosSource } from "../Hooks/getAxios";
-import { AxiosInstance } from "axios";
+import getAxios from "../Hooks/getAxios";
 
 const axiosLink  = getAxios()
 interface ICreateUser {
@@ -26,4 +25,4 @@ const createUser = createAsyncThunk(
 
 
 
-// export { createUser }
+export { createUser }
