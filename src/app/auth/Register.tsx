@@ -1,14 +1,25 @@
 'use client'
+import axios from 'axios';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { IoEye, IoEyeOff } from 'react-icons/io5';
+import { useDispatch } from 'react-redux';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
+import { createUser } from '../Components/Redux/ReduxFuncation';
+import { AppDispatch } from '../Components/Redux/store';
 
 const Register = () => {
 
+    interface IInfo {
+        email: string,
+        password: string,
+        name: string,
+        photo: string
+    }
+
     const [loading, setLoading] = useState(false);
     const [pass, setPass] = useState("password")
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const handleRegistration = (e: React.FormEvent<HTMLElement>) => {
         e.preventDefault()
         setLoading(true)
@@ -22,55 +33,26 @@ const Register = () => {
         const email: string = inputs.email.value
         const image: File = inputs.photo.files[0]
         const password: string = inputs.password.value
-        const role: string = "trainee"
-        // if (email && password) {
-        //     const fromData = new FormData()
-        //     fromData.append("file", image)
-        //     fromData.append("upload_preset", 'gym-site')
-        //     axios.post('https://api.cloudinary.com/v1_1/daudgshta/upload', fromData)
-        //         .then(res => {
-        //             console.log(res);
-        //             if (res.data) {
-        //                 const photo = res.data.secure_url
-        //                 dispatch(createUser({ email, password, name, photo, role }))
-        //                     .then(res => {
-        //                         if (res.error) {
-        //                             setLoading(false)
-        //                             toast.error(res.error.message, {
-        //                                 position: "top-right",
-        //                                 autoClose: 5000,
-        //                                 hideProgressBar: false,
-        //                                 closeOnClick: true,
-        //                                 pauseOnHover: true,
-        //                                 draggable: true,
-        //                                 progress: undefined,
-        //                                 theme: "dark",
-        //                                 transition: Bounce,
-        //                             });
-        //                         }
-        //                         else {
-        //                             setLoading(false)
-        //                             toast.success('Registration Successful', {
-        //                                 position: "top-right",
-        //                                 autoClose: 5000,
-        //                                 hideProgressBar: false,
-        //                                 closeOnClick: true,
-        //                                 pauseOnHover: true,
-        //                                 draggable: true,
-        //                                 progress: undefined,
-        //                                 theme: "dark",
-        //                                 transition: Bounce,
-        //                             });
-        //                         }
-        //                     })
-        //             }
+        if (email && password) {
+            const fromData = new FormData()
+            fromData.append("file", image)
+            fromData.append("upload_preset", 'gym-site')
+            axios.post('https://api.cloudinary.com/v1_1/daudgshta/upload', fromData)
+                .then(res => {
+                    console.log(res);
+                    if (res.data) {
+                        const photo = res.data.secure_url
+                        const userInfo: IInfo = { email, password, name, photo }
+                        dispatch(createUser({ userInfo }))
+                            .then(res => {
+                                console.log(res);
+                                setLoading(false)
+                            })
 
-        //         })
-        //         .catch(err => {
-        //             console.log(err);
-
-        //         })
-        // }
+                    }
+                }
+                )
+        }
     }
 
     return (
