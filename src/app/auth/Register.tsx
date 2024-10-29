@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import { createUser } from '../Components/Redux/ReduxFuncation';
 import { AppDispatch } from '../Components/Redux/store';
+import ShowToast from '../Components/Toastify/ShowToast';
 
 const Register = () => {
 
@@ -44,10 +45,17 @@ const Register = () => {
                         const photo = res.data.secure_url
                         const userInfo: IInfo = { email, password, name, photo }
                         dispatch(createUser({ userInfo }))
-                            .then(res => {
-                                console.log(res);
-                                setLoading(false)
-                            })
+                        .unwrap()
+                        .then((payload) => {
+                            console.log("Payload:", payload);
+                            setLoading(false);
+                            ShowToast({ success: "Registration Successful" });
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                            setLoading(false);
+                            ShowToast({ error: error.message });
+                        });
 
                     }
                 }

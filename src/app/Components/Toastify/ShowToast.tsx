@@ -3,10 +3,11 @@ import React from 'react';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const ShowToast = ({ message }: { message: { success : string, error : string} }) => {
+const ShowToast = ({ success, error }: { success?: string, error?: string }) => {
+    console.log(success, error);
 
-    if (message?.success) {
-        toast.success(message.success, {
+    if (success) {
+        toast.success(success, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -19,8 +20,8 @@ const ShowToast = ({ message }: { message: { success : string, error : string} }
         });
     }
 
-    if (message?.error) {
-        toast.success(message.error, {
+    if (error) {
+        toast.error(error, {
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
