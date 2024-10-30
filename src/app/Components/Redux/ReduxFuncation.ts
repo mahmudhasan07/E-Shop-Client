@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import getAxios from "../Hooks/getAxios";
 import { AxiosError } from "axios";
 
-const axiosLink  = getAxios()
+const axiosLink = getAxios()
 interface ICreateUser {
     name: string;
     email: string;
@@ -11,25 +11,46 @@ interface ICreateUser {
 }
 
 interface ResponseInfo {
-    response : {
-        data : object
+    response: {
+        data: object
     }
-} 
+}
 
-const createUser  = createAsyncThunk(
+const createUser = createAsyncThunk(
     "users/createuser",
     async ({ userInfo }: { userInfo: ICreateUser }) => {
         try {
             const res = await axiosLink.post('/user/create', userInfo)
             return res.data;
-        } catch (error ) {
+        } catch (error) {
             console.log(error);
-            const errorMessage = error as AxiosError 
-            throw  errorMessage.response?.data;
+            const errorMessage = error as AxiosError
+            throw errorMessage.response?.data;
+        }
+    }
+)
+
+
+interface IlogIn {
+    email: string,
+    password: string
+}
+
+const logInUser = createAsyncThunk(
+    "users/logInUser",
+    async ({ email, password }: IlogIn) => {
+        try {
+            const logInInfo: IlogIn = { email, password }
+            const res = await axiosLink.post(`/user/login/${email}`, logInInfo)
+            return res?.data
+        } catch (error) {
+            const err = error as AxiosError
+            throw err.response?.data;
+
         }
     }
 )
 
 
 
-export { createUser }
+export { createUser, logInUser }
